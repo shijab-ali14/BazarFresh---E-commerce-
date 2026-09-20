@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BazarFresh Superstore | বাজারফ্রেশ সুপারস্টোর - Fresh Groceries & Daily Essentials</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        citrus: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        freshRed: '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        bangla: ['Hind Siliguri', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft-glow': '0 10px 30px -5px rgba(22, 163, 74, 0.12)',
+                        'card-hover': '0 20px 35px -10px rgba(0, 0, 0, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body class="selection:bg-brand-500 selection:text-white">
+
+    <div class="bg-gradient-to-r from-brand-800 via-brand-700 to-brand-900 text-white text-xs font-medium py-2 px-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <span class="bg-citrus-500 text-slate-900 font-extrabold px-2 py-0.5 rounded text-[10px] tracking-wider uppercase">⚡ FLASH</span>
+                <span class="font-bangla text-xs sm:text-sm">৳৯৯৯+ অর্ডারে ফ্রি হোম ডেলিভারি! কোড ব্যবহার করুন: <strong class="underline font-sans text-citrus-400">FRESH50</strong></span>
+            </div>
+            <div class="flex items-center space-x-4 text-brand-100 text-[11px]">
+                <span class="flex items-center gap-1"><i class="fa-solid fa-clock"></i> 30-Min Express Delivery</span>
+                <span class="hidden md:inline">|</span>
+                <span class="hidden md:flex items-center gap-1"><i class="fa-solid fa-headset"></i> Helpline: 16247</span>
+            </div>
+        </div>
+    </div>
+
+    <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+            <div class="flex items-center justify-between gap-4">
+                
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center space-x-2.5 shrink-0">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 flex items-center justify-center text-white text-xl shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-slate-900 leading-none block font-sans">Bazar<span class="text-brand-600">Fresh</span></span>
+                        <span class="text-[11px] font-bangla font-semibold text-brand-700 tracking-wide">বাজারফ্রেশ সুপারস্টোর</span>
+                    </div>
+                </a>
+
+                <!-- Delivery Location Selector -->
+                <div class="hidden lg:flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-100/80 hover:bg-slate-200/60 transition-colors cursor-pointer text-xs border border-slate-200" onclick="toggleLocationModal()">
+                    <i class="fa-solid fa-location-dot text-brand-600 text-base"></i>
+                    <div class="text-left">
+                        <span class="block text-[10px] text-slate-500 font-bold uppercase">Deliver To</span>
+                        <span class="font-bold text-slate-800 font-bangla" id="currentLocationText">ধানমন্ডি, ঢাকা (30 Min)</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-slate-400 text-[10px] ml-1"></i>
+                </div>
+
+                <!-- Main Search Bar -->
+                <div class="flex-1 max-w-2xl mx-2 hidden sm:block">
+                    <div class="flex items-center rounded-2xl border-2 border-brand-500/30 bg-white overflow-hidden focus-within:border-brand-500 transition-all shadow-xs">
+                        <select id="searchCategorySelect" class="bg-slate-50 text-slate-700 font-semibold text-xs py-3 px-3 border-r border-slate-200 focus:outline-none cursor-pointer">
+                            <option value="all">All Categories</option>
+                            <option value="veg">Vegetables & Fruits</option>
+                            <option value="dairy">Dairy & Eggs</option>
+                            <option value="meat">Meat & Fish</option>
+                            <option value="grocery">Grocery Staples</option>
+                            <option value="snacks">Snacks & Beverages</option>
+                        </select>
+                        <input type="text" id="globalSearchInput" oninput="handleGlobalSearch()" placeholder="Search fresh vegetables, rice, milk, fish..." class="w-full py-2.5 px-4 text-xs sm:text-sm text-slate-800 focus:outline-none font-bangla">
+                        <button class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-3 text-sm font-semibold transition-colors flex items-center justify-center">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Controls (Cart & Account) -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleTrackerModal()" class="hidden md:flex items-center space-x-2 px-3 py-2 rounded-xl bg-brand-50 text-brand-700 border border-brand-200 hover:bg-brand-100 transition-colors text-xs font-bold">
+                        <i class="fa-solid fa-truck-fast text-brand-600"></i>
+                        <span>Track Order</span>
+                    </button>
+
+                    <!-- Cart Drawer Button -->
+                    <button onclick="toggleCartDrawer()" class="relative p-2.5 sm:px-4 sm:py-2.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white transition-all shadow-md shadow-brand-600/30 flex items-center space-x-2">
+                        <i class="fa-solid fa-cart-shopping text-base"></i>
+                        <span class="hidden sm:inline font-bold text-xs uppercase tracking-wider">Cart</span>
+                        <span id="headerCartBadge" class="bg-citrus-500 text-slate-950 font-black text-xs px-2 py-0.5 rounded-full">0</span>
+                    </button>
+
+                    <!-- Mobile Navigation Toggle -->
+                    <button id="mobileNavBtn" class="sm:hidden text-slate-800 text-xl p-2">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="mt-3 sm:hidden">
+                <div class="flex items-center rounded-xl border border-slate-300 bg-white overflow-hidden">
+                    <input type="text" id="mobileSearchInput" oninput="handleGlobalSearch('mobile')" placeholder="Search items..." class="w-full py-2 px-3 text-xs text-slate-800 focus:outline-none font-bangla">
+                    <button class="bg-brand-600 text-white px-4 py-2 text-xs">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Quick Category Bar -->
+        <div class="bg-slate-50 border-t border-slate-200/80">
+            <div class="max-w-7xl mx-auto px-4 flex items-center space-x-6 overflow-x-auto py-2.5 no-scrollbar text-xs font-semibold text-slate-700">
+                <a href="#products" onclick="setMainCategory('all')" class="hover:text-brand-600 whitespace-nowrap flex items-center gap-1.5 text-brand-700 font-bold"><i class="fa-solid fa-border-all"></i> All Products</a>
+                <a href="#products" onclick="setMainCategory('veg')" class="hover:text-brand-600 whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-carrot text-orange-500"></i> Vegetables & Fruits</a>
+                <a href="#products" onclick="setMainCategory('dairy')" class="hover:text-brand-600 whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-cow text-sky-600"></i> Dairy & Eggs</a>
+                <a href="#products" onclick="setMainCategory('meat')" class="hover:text-brand-600 whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-fish text-blue-500"></i> Meat & Fish</a>
+                <a href="#products" onclick="setMainCategory('grocery')" class="hover:text-brand-600 whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-wheat-awn text-amber-600"></i> Rice & Grocery</a>
+                <a href="#products" onclick="setMainCategory('snacks')" class="hover:text-brand-600 whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-cookie-bite text-amber-800"></i> Snacks & Drinks</a>
+                <a href="#flash" class="text-freshRed hover:underline font-bold whitespace-nowrap flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> Daily Flash Sale</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-6 sm:py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Main Promo Hero Card -->
+                <div class="lg:col-span-8 rounded-3xl bg-gradient-to-r from-brand-900 via-brand-800 to-brand-950 text-white p-6 sm:p-10 relative overflow-hidden flex flex-col justify-between min-h-[320px] sm:min-h-[380px] shadow-soft-glow">
+                    <!-- Background Decorative Circles & Graphic -->
+                    <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-brand-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute right-6 bottom-4 opacity-20 lg:opacity-40 pointer-events-none">
+                        <i class="fa-solid fa-basket-shopping text-[220px] text-white"></i>
+                    </div>
+
+                    <!-- Banner Content -->
+                    <div class="relative z-10 space-y-4 max-w-lg">
+                        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-citrus-500 text-slate-950 text-xs font-black uppercase tracking-wider">
+                            <i class="fa-solid fa-leaf"></i> 100% Organic Fresh Daily
+                        </span>
+                        
+                        <h1 class="text-3xl sm:text-5xl font-black font-bangla leading-tight text-white">
+                            তাজা সবজি ও নিত্যপ্রয়োজনীয় বাজার <span class="text-citrus-400">এখন ঘরে বসেই!</span>
+                        </h1>
+
+                        <p class="text-brand-100 text-xs sm:text-sm font-bangla leading-relaxed">
+                            সরাসরি ক্ষেত থেকে সংগৃহীত বিষমুক্ত শাক-সবজি, দেশি মাছ, ফ্রেশ মাংস এবং ব্র্যান্ডের গ্রোসারিতে ৩০ মিনিটের মধ্যে দ্রুত ডেলিভারি।
+                        </p>
+                    </div>
+
+                    <!-- Voucher & CTA Row -->
+                    <div class="relative z-10 pt-6 flex flex-wrap items-center gap-4 border-t border-brand-700/60">
+                        <a href="#products" class="px-6 py-3.5 rounded-2xl bg-citrus-500 hover:bg-citrus-400 text-slate-950 font-black text-xs sm:text-sm tracking-wider uppercase shadow-lg transition-all flex items-center gap-2">
+                            <span>Shop Now</span> <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+                        <div class="flex items-center space-x-2 bg-brand-950/80 px-4 py-2.5 rounded-2xl border border-brand-600/50">
+                            <i class="fa-solid fa-ticket text-citrus-400 text-base"></i>
+                            <div class="text-left text-xs">
+                                <span class="block text-[10px] text-brand-300">Voucher Code</span>
+                                <span class="font-mono font-bold text-citrus-400">FRESH50 (50% Off)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Deal Cards -->
+                <div class="lg:col-span-4 flex flex-col gap-4">
+                    
+                    <!-- Card 1 -->
+                    <div class="flex-1 rounded-3xl bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white relative overflow-hidden flex flex-col justify-between shadow-sm">
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-black uppercase bg-slate-950/30 px-2.5 py-1 rounded-full text-amber-100">Super Discount</span>
+                            <h3 class="text-2xl font-black font-bangla">খাঁটি আমশোল ও গাভীর দুধ</h3>
+                            <p class="text-xs text-amber-100">Flat 20% cashback on Dairy items</p>
+                        </div>
+                        <a href="#products" onclick="setMainCategory('dairy')" class="mt-4 inline-flex items-center text-xs font-bold text-slate-950 bg-white hover:bg-amber-50 px-4 py-2 rounded-xl w-max transition-colors">
+                            Explore Dairy <i class="fa-solid fa-chevron-right text-[10px] ml-1.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="flex-1 rounded-3xl bg-gradient-to-br from-teal-600 to-teal-800 p-6 text-white relative overflow-hidden flex flex-col justify-between shadow-sm">
+                        <div class="space-y-1">
+                            <span class="text-[10px] font-black uppercase bg-slate-950/30 px-2.5 py-1 rounded-full text-teal-100">Meat & Seafood</span>
+                            <h3 class="text-2xl font-black font-bangla">তাজা দেশি রুই ও বয়লার চিকেন</h3>
+                            <p class="text-xs text-teal-100">Cleaned & ready for cooking</p>
+                        </div>
+                        <a href="#products" onclick="setMainCategory('meat')" class="mt-4 inline-flex items-center text-xs font-bold text-slate-950 bg-white hover:bg-teal-50 px-4 py-2 rounded-xl w-max transition-colors">
+                            Buy Meat & Fish <i class="fa-solid fa-chevron-right text-[10px] ml-1.5"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-10 bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="rounded-3xl bg-gradient-to-r from-brand-50 via-slate-50 to-brand-100 p-6 sm:p-8 border border-brand-200/80 shadow-xs">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-5 space-y-3">
+                        <span class="px-3 py-1 rounded-full bg-brand-200 text-brand-800 text-xs font-bold uppercase tracking-wider inline-block">
+                            <i class="fa-solid fa-calculator text-brand-700"></i> Smart Budget Planner
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black font-bangla text-slate-900">সাপ্তাহিক বাজার বাজেট ও সঞ্চয় ক্যালকুলেটর</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 font-bangla leading-relaxed">
+                            আপনার পরিবারের সদস্য সংখ্যা এবং পছন্দের ডায়েট সিলেক্ট করুন। বাজারফ্রেশ ক্লাবে কেনাকাটা করলে আনুমানিক কত টাকা সঞ্চয় হবে তা সরাসরি দেখুন!
+                        </p>
+                    </div>
+
+                    <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            <!-- Family Size Input -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-700 uppercase block">Family Members</label>
+                                <select id="calcFamilySize" onchange="calculateBudget()" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-brand-500">
+                                    <option value="2">2 Persons (Small Family)</option>
+                                    <option value="4" selected>4 Persons (Standard Family)</option>
+                                    <option value="6">6 Persons (Large Family)</option>
+                                </select>
+                            </div>
+
+                            <!-- Diet Preference -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-700 uppercase block">Diet Preference</label>
+                                <select id="calcDietType" onchange="calculateBudget()" class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-brand-500">
+                                    <option value="balanced" selected>Standard Balanced (Veg + Meat)</option>
+                                    <option value="veg">Pure Vegetarian & Dairy</option>
+                                    <option value="premium">Organic & Premium Staples</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- Result Display Banner -->
+                        <div class="bg-brand-900 text-white p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <span class="text-[11px] text-brand-200 uppercase font-bold block">Estimated Weekly Cost</span>
+                                <span id="calcEstCost" class="text-2xl font-black font-serif text-citrus-400">৳2,450</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[11px] text-brand-200 uppercase font-bold block">You Save With BazarFresh</span>
+                                <span id="calcSavings" class="text-xl font-bold text-brand-300">৳380 / week</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-12 bg-slate-900 text-white relative overflow-hidden" id="flash">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4 border-b border-slate-800 pb-6">
+                <div>
+                    <span class="text-xs font-bold text-citrus-400 uppercase tracking-widest block"><i class="fa-solid fa-bolt text-citrus-400 mr-1"></i> Limited Time Offer</span>
+                    <h2 class="text-2xl sm:text-4xl font-black font-bangla text-white">আজকের ফ্ল্যাশ সেল ও ছাড়!</h2>
+                </div>
+
+                <!-- Live Countdown Timer Component -->
+                <div class="flex items-center space-x-3 bg-slate-800/90 px-5 py-3 rounded-2xl border border-slate-700">
+                    <span class="text-xs font-bold text-slate-300 uppercase">Ends In:</span>
+                    <div class="flex items-center space-x-2 font-mono font-bold text-citrus-400 text-base">
+                        <span id="timerHours" class="bg-slate-950 px-2 py-1 rounded">04</span>:
+                        <span id="timerMinutes" class="bg-slate-950 px-2 py-1 rounded">32</span>:
+                        <span id="timerSeconds" class="bg-slate-950 px-2 py-1 rounded">18</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flash Product Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="flashProductsGrid">
+                <!-- Javascript Injected Flash Products -->
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-16" id="products">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Title & Filter Bar -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-8 gap-6">
+                <div>
+                    <span class="text-xs font-bold text-brand-700 uppercase tracking-widest block">Quality Assured</span>
+                    <h2 class="text-3xl font-black font-bangla text-slate-900">নিত্যদিনের তাজা বাজার প্রোডাক্টস</h2>
+                </div>
+
+                <!-- Filters & Sorting Controls -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Category Tabs -->
+                    <div class="flex items-center space-x-1 bg-slate-200/80 p-1 rounded-2xl text-xs font-bold no-scrollbar overflow-x-auto">
+                        <button onclick="filterByTab('all')" class="prod-tab active px-4 py-2 rounded-xl bg-brand-600 text-white transition-all">All</button>
+                        <button onclick="filterByTab('veg')" class="prod-tab px-4 py-2 rounded-xl text-slate-700 hover:text-slate-950 transition-all">Veg & Fruit</button>
+                        <button onclick="filterByTab('dairy')" class="prod-tab px-4 py-2 rounded-xl text-slate-700 hover:text-slate-950 transition-all">Dairy & Milk</button>
+                        <button onclick="filterByTab('meat')" class="prod-tab px-4 py-2 rounded-xl text-slate-700 hover:text-slate-950 transition-all">Fish & Meat</button>
+                        <button onclick="filterByTab('grocery')" class="prod-tab px-4 py-2 rounded-xl text-slate-700 hover:text-slate-950 transition-all">Rice & Staples</button>
+                    </div>
+
+                    <!-- Sort Dropdown -->
+                    <select id="sortSelect" onchange="renderProducts()" class="py-2.5 px-3 rounded-xl bg-white border border-slate-300 text-xs font-bold text-slate-800 focus:outline-none">
+                        <option value="popular">Popularity</option>
+                        <option value="lowToHigh">Price: Low to High</option>
+                        <option value="highToLow">Price: High to Low</option>
+                        <option value="discount">Highest Discount</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid Container -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productsGrid">
+                <!-- JS dynamically renders standard items -->
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-16 bg-gradient-to-b from-slate-100 to-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-base font-bangla">৩০ মিনিটে এক্সপ্রেস ডেলিভারি</h4>
+                        <p class="text-xs text-slate-500 mt-1 font-bangla">আপনার নিকটস্থ রাইডার আপনার অর্ডার পৌঁছে দিবে দ্রুততম সময়ে।</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-2xl bg-citrus-100 text-citrus-600 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-base font-bangla">১০০% তাজা এবং গুণগত মান</h4>
+                        <p class="text-xs text-slate-500 mt-1 font-bangla">পছন্দ না হলে ক্যাশ অন ডেলিভারিতে তাৎক্ষণিক রিটার্ন সুবিধা।</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-base font-bangla">সহজ ও নিরাপদ পেমেন্ট</h4>
+                        <p class="text-xs text-slate-500 mt-1 font-bangla">বিকাশ, নগদ, কার্ড কিংবা ক্যাশ অন ডেলিভারিতে মুল্য পরিশোধ করুন।</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+        <div onclick="toggleCartDrawer()" class="absolute inset-0 bg-slate-950/60 backdrop-blur-xs cursor-pointer"></div>
+        
+        <div id="cartContent" class="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl pointer-events-auto flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out">
+            
+            <!-- Cart Header -->
+            <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-brand-50">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-bag-shopping text-brand-700 text-xl"></i>
+                    <h3 class="text-lg font-black text-slate-900 font-bangla">আপনার বাজার কার্ট</h3>
+                </div>
+                <button onclick="toggleCartDrawer()" class="text-slate-500 hover:text-slate-900 p-1 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List Container -->
+            <div class="p-5 overflow-y-auto flex-1 space-y-4" id="cartItemsContainer">
+                <div class="text-center py-20 text-slate-400 space-y-3" id="emptyCartMsg">
+                    <i class="fa-solid fa-cart-flatbed text-6xl text-slate-200"></i>
+                    <p class="font-bold text-slate-600 text-sm font-bangla">আপনার কার্ট বর্তমানে খালি আছে!</p>
+                    <p class="text-xs text-slate-400">প্রোডাক্ট তালিকা থেকে আপনার প্রয়োজনীয় বাজার যুক্ত করুন।</p>
+                </div>
+            </div>
+
+            <!-- Cart Footer & Coupon Section -->
+            <div class="p-5 border-t border-slate-200 bg-slate-50 space-y-4">
+                
+                <!-- Coupon Code Input -->
+                <div class="flex space-x-2">
+                    <input type="text" id="couponInput" placeholder="Coupon Code (FRESH50)" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 uppercase focus:outline-none focus:border-brand-500">
+                    <button onclick="applyCoupon()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs uppercase">Apply</button>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between text-slate-600">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal" class="font-bold text-slate-900">৳0</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>Discount</span>
+                        <span id="cartDiscount" class="font-bold text-brand-600">-৳0</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>Delivery Fee</span>
+                        <span id="cartDeliveryFee" class="font-bold text-slate-900">৳60</span>
+                    </div>
+                    <div class="flex justify-between text-base font-black text-slate-900 pt-2 border-t border-slate-200">
+                        <span>Total Amount</span>
+                        <span id="cartTotal" class="text-brand-700">৳0</span>
+                    </div>
+                </div>
+
+                <button onclick="openCheckoutModal()" class="w-full py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2">
+                    <span>Proceed To Checkout</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div onclick="closeQuickView()" class="absolute inset-0 bg-slate-950/60 backdrop-blur-xs"></div>
+        <div class="bg-white max-w-lg w-full rounded-3xl p-6 sm:p-8 relative z-10 shadow-2xl border border-slate-200 space-y-6">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex flex-col sm:flex-row gap-6 items-center">
+                <img id="qvImage" src="" alt="Product" class="w-40 h-40 object-cover rounded-2xl bg-slate-100">
+                <div class="space-y-2 text-center sm:text-left">
+                    <span id="qvCategory" class="text-[10px] font-bold text-brand-700 uppercase bg-brand-100 px-2.5 py-1 rounded-full">Category</span>
+                    <h3 id="qvTitle" class="text-xl font-bold font-bangla text-slate-900">Product Title</h3>
+                    <p id="qvUnit" class="text-xs text-slate-500 font-bold">1 kg</p>
+                    <div class="flex items-center justify-center sm:justify-start space-x-2 pt-1">
+                        <span id="qvPrice" class="text-2xl font-black text-brand-700 font-serif">৳0</span>
+                        <span id="qvOldPrice" class="text-xs text-slate-400 line-through font-serif">৳0</span>
+                    </div>
+                </div>
+            </div>
+
+            <p id="qvDesc" class="text-xs text-slate-600 leading-relaxed font-bangla bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                পণ্যের তথ্য বিবরণী...
+            </p>
+
+            <button id="qvAddToCartBtn" class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs uppercase tracking-wider shadow-md">
+                Add to Cart
+            </button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div onclick="closeCheckoutModal()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-xs"></div>
+        <div class="bg-white max-w-xl w-full rounded-3xl p-6 sm:p-8 relative z-10 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="space-y-1 text-center">
+                <h3 class="text-2xl font-black text-slate-900 font-bangla">অর্ডার কনফার্ম করুন</h3>
+                <p class="text-xs text-slate-500 font-bangla">আপনার ডেলিভারি তথ্য এবং পছন্দের পেমেন্ট পদ্ধতি নির্বাচন করুন।</p>
+            </div>
+
+            <form onsubmit="handlePlaceOrder(event)" class="space-y-4 text-xs font-bangla">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-700 uppercase">আপনার নাম</label>
+                        <input type="text" required placeholder="তানভীর আহমেদ" class="w-full p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="font-bold text-slate-700 uppercase">মোবাইল নম্বর</label>
+                        <input type="tel" required placeholder="01700-000000" class="w-full p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="font-bold text-slate-700 uppercase">পূর্ণাঙ্গ ডেলিভারি ঠিকানা</label>
+                    <textarea rows="2" required placeholder="বাসা নম্বর, রোড নম্বর, এলাকা, ঢাকা..." class="w-full p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <!-- Payment Gateways -->
+                <div class="space-y-2">
+                    <label class="font-bold text-slate-700 uppercase">পেমেন্ট মেথড নির্বাচন করুন</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="border-2 border-brand-500 rounded-xl p-3 text-center cursor-pointer bg-brand-50 block">
+                            <input type="radio" name="payment" value="bkash" checked class="hidden">
+                            <i class="fa-solid fa-mobile-screen text-pink-600 text-xl block mb-1"></i>
+                            <span class="font-bold text-slate-800">bKash</span>
+                        </label>
+                        <label class="border-2 border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-brand-300 block">
+                            <input type="radio" name="payment" value="nagad" class="hidden">
+                            <i class="fa-solid fa-wallet text-orange-600 text-xl block mb-1"></i>
+                            <span class="font-bold text-slate-800">Nagad</span>
+                        </label>
+                        <label class="border-2 border-slate-200 rounded-xl p-3 text-center cursor-pointer hover:border-brand-300 block">
+                            <input type="radio" name="payment" value="cod" class="hidden">
+                            <i class="fa-solid fa-hand-holding-dollar text-brand-700 text-xl block mb-1"></i>
+                            <span class="font-bold text-slate-800">Cash on Delivery</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm uppercase tracking-wider shadow-md transition-all">
+                    অর্ডার প্লেস করুন (৳<span id="checkoutTotalVal">0</span>)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="trackerModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div onclick="toggleTrackerModal()" class="absolute inset-0 bg-slate-950/70 backdrop-blur-xs"></div>
+        <div class="bg-white max-w-lg w-full rounded-3xl p-6 sm:p-8 relative z-10 shadow-2xl space-y-6">
+            <button onclick="toggleTrackerModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="space-y-1 text-center">
+                <span class="text-xs font-mono font-bold bg-brand-100 text-brand-700 px-3 py-1 rounded-full">ORDER #BF-98231</span>
+                <h3 class="text-2xl font-black text-slate-900 font-bangla pt-2">লাইভ এক্সপ্রেস ট্র্যাকিং</h3>
+                <p class="text-xs text-slate-500 font-bangla">আনুমানিক ডেলিভারি সময়: ২৫ মিনিট</p>
+            </div>
+
+            <!-- Stepper -->
+            <div class="space-y-6 pt-4 font-bangla">
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-sm"><i class="fa-solid fa-check"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">অর্ডার কনফার্মড</h4>
+                        <p class="text-[11px] text-slate-400">আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে (5 min ago)</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 rounded-full bg-brand-600 text-white font-bold flex items-center justify-center text-sm"><i class="fa-solid fa-box font-bold"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">প্যাকিং সম্পন্ন</h4>
+                        <p class="text-[11px] text-slate-400">ফ্রেশ আইটেম প্যাক করে ক্যাবিনেটে রাখা হয়েছে</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 rounded-full bg-citrus-500 text-slate-950 font-bold flex items-center justify-center text-sm animate-bounce"><i class="fa-solid fa-motorcycle"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm text-brand-700">রাইডার পথে আছে (Out for Delivery)</h4>
+                        <p class="text-[11px] text-slate-500">রাইডার সজীব হোসেন আপনার ঠিকানার দিকে আসছেন</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="locationModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div onclick="toggleLocationModal()" class="absolute inset-0 bg-slate-950/60 backdrop-blur-xs"></div>
+        <div class="bg-white max-w-sm w-full rounded-3xl p-6 relative z-10 shadow-2xl space-y-4">
+            <h3 class="text-lg font-bold text-slate-900 font-bangla">ডেলিভারি এলাকা নির্বাচন করুন</h3>
+            <div class="space-y-2 font-bangla text-xs">
+                <button onclick="setLocation('ধানমন্ডি, ঢাকা (30 Min)')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-200 font-bold text-slate-800">ধানমন্ডি, ঢাকা</button>
+                <button onclick="setLocation('মিরপুর, ঢাকা (35 Min)')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-200 font-bold text-slate-800">মিরপুর, ঢাকা</button>
+                <button onclick="setLocation('উত্তরা, ঢাকা (25 Min)')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-200 font-bold text-slate-800">উত্তরা, ঢাকা</button>
+                <button onclick="setLocation('গুলশান, ঢাকা (30 Min)')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-brand-50 border border-slate-200 font-bold text-slate-800">গুলশান, ঢাকা</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-950 text-slate-300 pt-16 pb-12 text-xs border-t border-slate-800 font-bangla">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            
+            <div class="space-y-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-9 h-9 rounded-xl bg-brand-500 text-white flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <span class="text-xl font-black text-white font-sans">Bazar<span class="text-brand-500">Fresh</span></span>
+                </div>
+                <p class="text-slate-400 leading-relaxed">
+                    বাজারফ্রেশ বাংলাদেশের বিশ্বস্ত অনলাইন সুপারস্টোর। সবচেয়ে তাজা ফলমূল, সবজি ও গ্রোসারি সরাসরি আপনার দরজায়।
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="text-white font-bold uppercase tracking-wider text-xs">কুইক লিংকস</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="#products" class="hover:text-brand-400">তাজা শাক-সবজি</a></li>
+                    <li><a href="#products" class="hover:text-brand-400">মাছ ও মাংস</a></li>
+                    <li><a href="#products" class="hover:text-brand-400">ডেইরি ও দুগ্ধজাত</a></li>
+                    <li><a href="#flash" class="hover:text-brand-400">ডিসকাউন্ট অফারসমূহ</a></li>
+                </ul>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="text-white font-bold uppercase tracking-wider text-xs">যোগাযোগ ও হেল্পলাইন</h4>
+                <p class="text-slate-400"><i class="fa-solid fa-phone text-brand-500 mr-2"></i> হটলাইন: 16247 (২৪/৭)</p>
+                <p class="text-slate-400"><i class="fa-solid fa-envelope text-brand-500 mr-2"></i> support@bazarfresh.com</p>
+                <p class="text-slate-400"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i> লেভেল ৪, বনানী, ঢাকা-১২১৩</p>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="text-white font-bold uppercase tracking-wider text-xs">মোবাইল অ্যাপ ডাউনলোড করুন</h4>
+                <p class="text-slate-400">সহজে কেনাকাটা করতে আমাদের অ্যাপ ডাউনলোড করুন।</p>
+                <div class="flex space-x-2">
+                    <button class="bg-slate-800 text-white px-3 py-2 rounded-xl flex items-center space-x-2 border border-slate-700">
+                        <i class="fa-brands fa-google-play text-lg text-brand-400"></i>
+                        <span class="text-[10px] text-left block">
+                            <span class="block text-slate-400">Get it on</span>
+                            Google Play
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 border-t border-slate-900 pt-8 flex flex-col sm:flex-row justify-between items-center text-slate-500 gap-4">
+            <p>© 2026 BazarFresh Superstore (বাজারফ্রেশ সুপারস্টোর). All Rights Reserved.</p>
+            <div class="flex space-x-4 text-base">
+                <i class="fa-brands fa-facebook hover:text-brand-400 cursor-pointer"></i>
+                <i class="fa-brands fa-instagram hover:text-brand-400 cursor-pointer"></i>
+                <i class="fa-brands fa-youtube hover:text-brand-400 cursor-pointer"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
